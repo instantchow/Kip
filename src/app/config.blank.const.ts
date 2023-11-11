@@ -4,6 +4,7 @@ import { DefaultUnitsConfig } from "./config.blank.units.const";
 
 export const DefaultAppConfig: IAppConfig = {
   "configVersion": 9,
+  "autoFullScrenMode": false,
   "dataSets": [],
   "unitDefaults": DefaultUnitsConfig,
   "notificationConfig": DefaultNotificationConfig,

@@ -1,5 +1,5 @@
 import { AuththeticationService } from './auththetication.service';
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, AfterContentInit, Inject } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common'
 import { Subscription } from 'rxjs';
 import { OverlayContainer } from '@angular/cdk/overlay';
@@ -20,16 +20,16 @@ declare var NoSleep: any; //3rd party
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
 
-  noSleep = new NoSleep();
+  private noSleep = new NoSleep();
 
   pageName: string = '';
 
   unlockStatus: boolean = false;
   unlockStatusSub: Subscription;
 
-  fullscreenStatus = false;
+  public fullscreenStatus = false;
 
   themeName: string;
   activeThemeClass: string = 'modern-dark fullheight';
@@ -57,6 +57,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    if (this.appSettingsService.autoFullScrenMode) {
+      this.fullscreenStatus = this.appSettingsService.autoFullScrenMode;
+      this.noSleep.enable();
+    }
+
     // Page layout area operations sub
     this.unlockStatusSub = this.appSettingsService.getUnlockStatusAsO().subscribe(
       status => { this.unlockStatus = status; }
@@ -131,6 +136,18 @@ export class AppComponent implements OnInit, OnDestroy {
     this.DataSetService.startAllDataSets();
   }
 
+  ngAfterViewInit(): void {
+    if (this.appSettingsService.autoFullScrenMode) {
+      if (screenfull.isEnabled) {
+          screenfull.toggle();
+      }
+    }
+  }
+
+  ngAfterContentInit(): void {
+
+  }
+
   private displayConnectionsStatusNotification(streamStatus: IStreamStatus) {
 
     switch (streamStatus.operation) {
@@ -197,17 +214,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
   toggleFullScreen() {
     if (screenfull.isEnabled) {
-      if (!this.fullscreenStatus) {
-        screenfull.request();
+      if (!screenfull.isFullscreen) {
+        screenfull.toggle();
         this.noSleep.enable();
+        this.fullscreenStatus = screenfull.isFullscreen;
       } else {
-        if (screenfull.isFullscreen) {
-          screenfull.exit();
-        }
+        screenfull.toggle();
         this.noSleep.disable();
+        this.fullscreenStatus = screenfull.isFullscreen;
       }
     }
-    this.fullscreenStatus = !this.fullscreenStatus;
   }
 
   ngOnDestroy() {

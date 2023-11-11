@@ -28,6 +28,7 @@ export class AppSettingsService {
   private themeName: BehaviorSubject<string> = new BehaviorSubject<string>(defaultTheme);
   private kipKNotificationConfig: BehaviorSubject<INotificationConfig> = new BehaviorSubject<INotificationConfig>(DefaultNotificationConfig);
 
+  public autoFullScrenMode: boolean = false;
   private useDeviceToken: boolean = false;
   private loginName: string;
   private loginPassword: string;
@@ -436,6 +437,7 @@ export class AppSettingsService {
 
     let storageObject: IAppConfig = {
       configVersion: configVersion,
+      autoFullScrenMode: this.autoFullScrenMode,
       dataSets: this.dataSets,
       unitDefaults: this.unitDefaults.getValue(),
       notificationConfig: this.kipKNotificationConfig.getValue(),

@@ -23,6 +23,7 @@ export interface IConfig {
 
 export interface IAppConfig {
   configVersion: number;
+  autoFullScrenMode: boolean;
   dataSets: IDataSet[];
   unitDefaults: IUnitDefaults;
   notificationConfig: INotificationConfig;

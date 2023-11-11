@@ -117,7 +117,7 @@ export class StorageService {
    *
    * @param {string} scope String value of either 'global' or 'user'
    * @param {string} configName String value of the config name
-   * @param {boolean} isInitLoad User for AppSettings Init. If True, config will be keept
+   * @param {boolean} isInitLoad Used for AppSettings Init. If True, config will be keept
    * @return {*}  {IConfig}
    * @memberof StorageService
    */
